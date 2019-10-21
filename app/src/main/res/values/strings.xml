@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Deep Military Camera</string>
+    <string name="app_name">AndroidTensorFlowMachineLearningExample</string>
+    <string name="toggle_camera">Toggle Camera</string>
+    <string name="detect_object">Detect Object</string>
 </resources>
