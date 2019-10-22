@@ -61,6 +61,8 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.milcam.deep.R;
+import com.milcam.deep.activity.CameraActivity;
+import com.milcam.deep.activity.DetectorActivity;
 import com.milcam.deep.common.Util;
 import com.milcam.deep.model.ChatModel;
 import com.milcam.deep.model.Message;
@@ -136,7 +138,6 @@ public class ChatFragment extends Fragment{
         recyclerView = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-        //camView = view.findViewById(R.id.container_cam); @@@@
 
 
         msg_input = view.findViewById(R.id.msg_input);
@@ -418,10 +419,11 @@ public class ChatFragment extends Fragment{
     // choose file
     Button.OnClickListener fileBtnClickListener = new View.OnClickListener() {
         public void onClick(final View view) {
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType("*/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
+            Intent intent = new Intent(getActivity(), DetectorActivity.class);
+            startActivity(intent);
+//            intent.setType("*/*");
+//            intent.setAction(Intent.ACTION_GET_CONTENT);
+//            startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
         }
     };
 

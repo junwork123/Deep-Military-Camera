@@ -79,6 +79,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 
 public abstract class CameraActivity extends Activity
         implements OnImageAvailableListener, Camera.PreviewCallback {
@@ -105,14 +106,7 @@ public abstract class CameraActivity extends Activity
   private Runnable postInferenceCallback;
   private Runnable imageConverter;
 
-
-  /// 경찰아저씨 여기부터!
-  private Button btn_picture;
-  private ImageButton btn_info;
-
   private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
-  private static final int REQUEST_CAMERA_PERMISSION = 1;
-  private static final String FRAGMENT_DIALOG = "dialog";
 
   /**
    * Tag for the {@link Log}.
@@ -552,24 +546,19 @@ public abstract class CameraActivity extends Activity
    */
   @SuppressLint("MissingPermission")
   private void openCamera(int width, int height) {
-//    if (hasPermission()) {
-//      setFragment();
-//    } else {
-//      requestPermission();
-//    }
-//    setUpCameraOutputs(width, height);
-//    configureTransform(width, height);
-//    CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-//    try {
-//      if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
-//        throw new RuntimeException("Time out waiting to lock camera opening.");
-//      }
-//      manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
-//    } catch (CameraAccessException e) {
-//      e.printStackTrace();
-//    } catch (InterruptedException e) {
-//      throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
-//    }
+    setUpCameraOutputs(width, height);
+    configureTransform(width, height);
+    CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+    try {
+      if (!mCameraOpenCloseLock.tryAcquire(2500, TimeUnit.MILLISECONDS)) {
+        throw new RuntimeException("Time out waiting to lock camera opening.");
+      }
+      manager.openCamera(mCameraId, mStateCallback, mBackgroundHandler);
+    } catch (CameraAccessException e) {
+      e.printStackTrace();
+    } catch (InterruptedException e) {
+      throw new RuntimeException("Interrupted while trying to lock camera opening.", e);
+    }
   }
 
     /**
@@ -901,11 +890,11 @@ public abstract class CameraActivity extends Activity
 
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
-    LOGGER.d("onCreate " + this);
+    Log.e("DMC","onCreate " + this);
     super.onCreate(null);
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
     setContentView(R.layout.activity_camera);
+    setFragment();
 
   }
 
@@ -1093,39 +1082,6 @@ public abstract class CameraActivity extends Activity
     }
   }
 
-  @Override
-  public void onRequestPermissionsResult(
-      final int requestCode, final String[] permissions, final int[] grantResults) {
-    if (requestCode == PERMISSIONS_REQUEST) {
-      if (grantResults.length > 0
-          && grantResults[0] == PackageManager.PERMISSION_GRANTED
-          && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-        setFragment();
-      } else {
-        requestPermission();
-      }
-    }
-  }
-
-  private boolean hasPermission() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      return checkSelfPermission(PERMISSION_CAMERA) == PackageManager.PERMISSION_GRANTED &&
-          checkSelfPermission(PERMISSION_STORAGE) == PackageManager.PERMISSION_GRANTED;
-    } else {
-      return true;
-    }
-  }
-
-  private void requestPermission() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-      if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA) ||
-          shouldShowRequestPermissionRationale(PERMISSION_STORAGE)) {
-        Toast.makeText(CameraActivity.this,
-            "Camera AND storage permission are required for this demo", Toast.LENGTH_LONG).show();
-      }
-      requestPermissions(new String[] {PERMISSION_CAMERA, PERMISSION_STORAGE}, PERMISSIONS_REQUEST);
-    }
-  }
 
   // Returns true if the device supports the required hardware level, or better.
   private boolean isHardwareLevelSupported(

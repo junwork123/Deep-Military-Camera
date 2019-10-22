@@ -34,7 +34,6 @@
         android:icon="@drawable/ic_launcher"
         android:theme="@style/AppTheme.NoActionBar">
 
-
         <activity android:name="com.milcam.deep.activity.DetectorActivity"
                   android:screenOrientation="portrait">
         </activity>
