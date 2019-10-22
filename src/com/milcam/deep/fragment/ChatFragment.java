@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -113,6 +114,8 @@ public class ChatFragment extends Fragment{
     private ProgressDialog progressDialog = null;
     private Integer userCount = 0;
 
+    private FrameLayout camView;
+
     public ChatFragment() {
     }
 
@@ -133,6 +136,8 @@ public class ChatFragment extends Fragment{
         recyclerView = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+        //camView = view.findViewById(R.id.container_cam); @@@@
+
 
         msg_input = view.findViewById(R.id.msg_input);
         sendBtn = view.findViewById(R.id.sendBtn);

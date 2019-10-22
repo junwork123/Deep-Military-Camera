@@ -48,33 +48,14 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     private FloatingActionButton makeRoomBtn;
-    private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-    private static final String PERMISSION_STORAGE_WRITE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-    private static final String PERMISSION_STORAGE_READ = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private static final String PERMISSION_INTERNET = Manifest.permission.INTERNET;
 
-
-    private int PERMISSIONS_REQUEST = 1;
-
-    private void requestPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (shouldShowRequestPermissionRationale(PERMISSION_CAMERA) ||
-                    shouldShowRequestPermissionRationale(PERMISSION_STORAGE_WRITE) ||
-                    shouldShowRequestPermissionRationale(PERMISSION_STORAGE_READ) ||
-                    shouldShowRequestPermissionRationale(PERMISSION_INTERNET)) {
-                Toast.makeText(MainActivity.this,
-                        "Camera AND storage permission are required for this demo", Toast.LENGTH_LONG).show();
-            }
-            requestPermissions(new String[] {PERMISSION_CAMERA, PERMISSION_STORAGE_WRITE, PERMISSION_STORAGE_READ, PERMISSION_INTERNET }, PERMISSIONS_REQUEST);
-        }
-    }
 
     @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        requestPermission();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three

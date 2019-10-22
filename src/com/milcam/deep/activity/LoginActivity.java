@@ -1,8 +1,10 @@
 package com.milcam.deep.activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,11 +30,29 @@ public class LoginActivity extends AppCompatActivity {
     private EditText user_pw;
     SharedPreferences sharedPreferences;
 
+    private int PERMISSIONS_REQUEST = 1;
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.INTERNET) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_NETWORK_STATE) ||
+                    shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_WIFI_STATE)) {
+                Toast.makeText(LoginActivity.this,
+                        "Camera AND storage permission are required for this demo", Toast.LENGTH_LONG).show();
+            }
+            requestPermissions(new String[] {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE}, PERMISSIONS_REQUEST);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        requestPermission();
         user_id = findViewById(R.id.user_id);
         user_pw = findViewById(R.id.user_pw);
         Button loginBtn = findViewById(R.id.loginBtn);

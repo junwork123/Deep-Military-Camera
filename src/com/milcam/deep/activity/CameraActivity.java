@@ -899,8 +899,6 @@ public abstract class CameraActivity extends Activity
 
     }
 
-
-  /// 경찰아저씨 여기까지 에요!
   @Override
   protected void onCreate(final Bundle savedInstanceState) {
     LOGGER.d("onCreate " + this);
@@ -909,27 +907,6 @@ public abstract class CameraActivity extends Activity
 
     setContentView(R.layout.activity_camera);
 
-    btn_picture = (Button) findViewById(R.id.picture);
-    btn_picture.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        takePicture();
-      }
-    });
-    btn_info = (ImageButton) findViewById(R.id.info);
-    btn_info.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        Toast.makeText(getApplicationContext(), "info", Toast.LENGTH_SHORT).show();
-      }
-    });
-    mTextureView = (AutoFitTextureView) findViewById(R.id.texture);
-
-    if (hasPermission()) {
-      setFragment();
-    } else {
-      requestPermission();
-    }
   }
 
   private byte[] lastPreviewFrame;
@@ -1227,7 +1204,7 @@ public abstract class CameraActivity extends Activity
 
     getFragmentManager()
         .beginTransaction()
-        .replace(R.id.container, fragment)
+        .replace(R.id.container_cam, fragment)
         .commit();
   }
 
