@@ -31,7 +31,7 @@ import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.milcam.deep.AutoFitTextureView;
+import com.milcam.deep.view.AutoFitTextureView;
 import com.milcam.deep.R;
 import com.milcam.deep.env.ImageUtils;
 import com.milcam.deep.env.Logger;

@@ -1,4 +1,4 @@
-package com.milcam.deep.common;
+package com.milcam.deep.env;
 
 import android.content.Context;
 

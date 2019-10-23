@@ -8,13 +8,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.milcam.deep.R;
-import com.milcam.deep.common.Util;
 
 public class UserPWActivity extends AppCompatActivity {
     private EditText user_pw1;
@@ -37,11 +37,11 @@ public class UserPWActivity extends AppCompatActivity {
         public void onClick(final View view) {
             String pw1 = user_pw1.getText().toString().trim();
             if (pw1.length()<8) {
-                Util.showMessage(getApplicationContext(), "Please enter at least eight characters.");
+                Toast.makeText(getApplicationContext(), "Please enter at least eight characters.", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (!pw1.equals(user_pw2.getText().toString().trim())) {
-                Util.showMessage(getApplicationContext(), "Password does not match the confirm password.");
+                Toast.makeText(getApplicationContext(), "Password does not match the confirm password.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -49,7 +49,7 @@ public class UserPWActivity extends AppCompatActivity {
             user.updatePassword(pw1).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    Util.showMessage(getApplicationContext(), "Password changed");
+                    Toast.makeText(getApplicationContext(), "Password changed", Toast.LENGTH_SHORT).show();
 
                     InputMethodManager imm= (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(user_pw2.getWindowToken(), 0);

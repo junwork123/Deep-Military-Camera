@@ -52,7 +52,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.milcam.deep.AutoFitTextureView;
+import com.milcam.deep.view.AutoFitTextureView;
 import com.milcam.deep.R;
 import com.milcam.deep.env.Logger;
 

@@ -16,7 +16,6 @@
 
 package com.milcam.deep.activity;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -27,13 +26,14 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
 import android.widget.Toast;
 
-import com.milcam.deep.OverlayView;
+import com.milcam.deep.view.OverlayView;
 import com.milcam.deep.R;
 import com.milcam.deep.detector.TensorFlowMultiBoxDetector;
 import com.milcam.deep.detector.TensorFlowObjectDetectionAPIModel;
@@ -42,8 +42,9 @@ import com.milcam.deep.env.BorderedText;
 import com.milcam.deep.env.ImageUtils;
 import com.milcam.deep.env.Logger;
 import com.milcam.deep.model.Classifier;
-import com.milcam.deep.model.Events;
-import com.milcam.deep.tracking.MultiBoxTracker;
+import com.milcam.deep.detector.MultiBoxTracker;
+
+import org.tensorflow.Session;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -334,12 +335,16 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 result.setLocation(location);
 
                 if(result.getTitle().equals("person")) {
-                  String msg = "거동수상자 발생";
+                  final String msg = "거동수상자 발생";
                   Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
-                  Log.d("DMC", "hey~ there are " + result.getTitle());
+                  Log.d("DMC", "Detector : " + result);
+                  runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                      ((ChatActivity)ChatActivity.mContext).gBus.post(msg);
+                    }
+                  });
 
-                  Events.EventAlert event = new Events.EventAlert(msg);
-                  ((ChatActivity)ChatActivity.mContext).gBus.post(event);
                 }
                 mappedRecognitions.add(result);
               }

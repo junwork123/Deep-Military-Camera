@@ -25,7 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.milcam.deep.R;
 import com.milcam.deep.activity.ChatActivity;
-import com.milcam.deep.common.FirestoreAdapter;
+import com.milcam.deep.env.FirestoreAdapter;
 import com.milcam.deep.model.UserModel;
 
 public class UserListFragment extends Fragment {

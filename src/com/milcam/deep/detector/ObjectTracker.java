@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-package com.milcam.deep.tracking;
+package com.milcam.deep.detector;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

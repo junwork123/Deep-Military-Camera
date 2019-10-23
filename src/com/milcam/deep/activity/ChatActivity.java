@@ -6,6 +6,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.milcam.deep.R;
 import com.milcam.deep.fragment.ChatFragment;
 import com.milcam.deep.fragment.UserListInRoomFragment;
 import com.milcam.deep.model.GlobalBus;
+import com.squareup.otto.Subscribe;
 
 public class ChatActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -21,12 +23,6 @@ public class ChatActivity extends AppCompatActivity {
     private UserListInRoomFragment userListInRoomFragment = null;
     public GlobalBus gBus;
     public static Context mContext;
-
-    @Override
-    public void onDestroy(){
-        super.onDestroy();
-        gBus.unregister(this);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

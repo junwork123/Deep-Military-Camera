@@ -1,4 +1,4 @@
-package com.milcam.deep.photoview;
+package com.milcam.deep.view;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;

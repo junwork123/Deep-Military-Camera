@@ -1,18 +1,15 @@
 package com.milcam.deep.fragment;
 
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -34,13 +31,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.eventbus.Subscribe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -55,20 +48,17 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.milcam.deep.R;
+import com.milcam.deep.activity.ChatActivity;
 import com.milcam.deep.activity.DetectorActivity;
-import com.milcam.deep.common.Util;
 import com.milcam.deep.model.ChatModel;
-import com.milcam.deep.model.Events;
 import com.milcam.deep.model.Message;
 import com.milcam.deep.model.UserModel;
-import com.milcam.deep.photoview.ViewPagerActivity;
+import com.milcam.deep.view.ViewPagerActivity;
+import com.squareup.otto.Subscribe;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -77,13 +67,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import static android.app.Activity.RESULT_OK;
-
 public class ChatFragment extends Fragment {
 
     private static final int PICK_FROM_ALBUM = 1;
     private static final int PICK_FROM_FILE = 2;
-    private static String rootPath = Util.getRootPath()+"/DMC/";
+    private static String rootPath;
 
     private Button sendBtn;
     private EditText msg_input;
@@ -104,8 +92,23 @@ public class ChatFragment extends Fragment {
 
     private ProgressDialog progressDialog = null;
     private Integer userCount = 0;
+    private int msgCount = 0;
+
+    public String getRootPath() {
+        String sdPath;
+        String ext1 = Environment.getExternalStorageState();
+        if (ext1.equals(Environment.MEDIA_MOUNTED)) {
+            sdPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        } else {
+            sdPath = Environment.MEDIA_UNMOUNTED;
+        }
+        return sdPath;
+    }
 
     public ChatFragment() {
+        ((ChatActivity) ChatActivity.mContext).gBus.register(this);
+        Log.d("dmc", "등록 성공");
+        rootPath = getRootPath()+"/DMC/";
     }
 
     public static final ChatFragment getInstance(String toUid, String roomID) {
@@ -132,14 +135,6 @@ public class ChatFragment extends Fragment {
 
         view.findViewById(R.id.imageBtn).setOnClickListener(imageBtnClickListener);
         view.findViewById(R.id.fileBtn).setOnClickListener(fileBtnClickListener);
-        view.findViewById(R.id.msg_input).setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus) {
-                    Util.hideKeyboard(getActivity());
-                }
-            }
-        });
 
         if (getArguments() != null) {
             roomID = getArguments().getString("roomID");
@@ -252,8 +247,6 @@ public class ChatFragment extends Fragment {
                     getUserInfoFromServer(key);
                 }
                 userCount = users.size();
-                //users.put(myUid, (long) 0);
-                //document.getReference().update("users", users);
             }
         });
     }
@@ -307,9 +300,20 @@ public class ChatFragment extends Fragment {
     };
 
     @Subscribe
-    public void connectEvent(Events.EventAlert event) {
-        Log.i("DMC", event.getMessage());
-        sendMessage(event.getMessage(), "0", null);
+    public void getPost(String _msg) {
+        final String msg = _msg;
+        final int delay = 40;
+        Log.d("DMC", msg);
+        if( msgCount == 0 || msgCount == delay/2) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendMessage(msg, "0", null);
+                }
+            }, 1000); // 지연시간
+
+        }
+        msgCount = (msgCount % delay) +1;
     }
 
     private void sendMessage(final String msg, String msgtype, final ChatModel.FileInfo fileinfo) {
@@ -360,7 +364,6 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            //sendGCM();
                             sendBtn.setEnabled(true);
                         }
                     }
@@ -384,73 +387,8 @@ public class ChatFragment extends Fragment {
         public void onClick(final View view) {
             Intent intent = new Intent(getActivity(), DetectorActivity.class);
             startActivity(intent);
-//            intent.setType("*/*");
-//            intent.setAction(Intent.ACTION_GET_CONTENT);
-//            startActivityForResult(Intent.createChooser(intent, "Select File"), PICK_FROM_FILE);
         }
     };
-
-    // uploading image / file
-    @Override
-    public void onActivityResult(final int requestCode, int resultCode, Intent data) {
-        if (resultCode!= RESULT_OK) { return;}
-        Uri fileUri = data.getData();
-        final String filename = Util.getUniqueValue();
-
-        showProgressDialog("Uploading selected File.");
-        final ChatModel.FileInfo fileinfo  = getFileDetailFromUri(getContext(), fileUri);
-
-        storageReference.child("files/"+filename).putFile(fileUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                sendMessage(filename, Integer.toString(requestCode), fileinfo);
-                hideProgressDialog();
-            }
-        });
-        if (requestCode != PICK_FROM_ALBUM) { return;}
-
-        // small image
-        Glide.with(getContext())
-                .asBitmap()
-                .load(fileUri)
-                .apply(new RequestOptions().override(150, 150))
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap bitmap, Transition<? super Bitmap> transition) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                        byte[] data = baos.toByteArray();
-                        storageReference.child("filesmall/"+filename).putBytes(data);
-                    }
-                });
-    }
-
-    // get file name and size from Uri
-    public static ChatModel.FileInfo getFileDetailFromUri(final Context context, final Uri uri) {
-        if (uri == null) { return null; }
-
-        ChatModel.FileInfo fileDetail = new ChatModel.FileInfo();
-        // File Scheme.
-        if (ContentResolver.SCHEME_FILE.equals(uri.getScheme())) {
-            File file = new File(uri.getPath());
-            fileDetail.filename = file.getName();
-            fileDetail.filesize = Util.size2String(file.length());
-        }
-        // Content Scheme.
-        else if (ContentResolver.SCHEME_CONTENT.equals(uri.getScheme())) {
-            Cursor returnCursor =
-                    context.getContentResolver().query(uri, null, null, null, null);
-            if (returnCursor != null && returnCursor.moveToFirst()) {
-                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                int sizeIndex = returnCursor.getColumnIndex(OpenableColumns.SIZE);
-                fileDetail.filename = returnCursor.getString(nameIndex);
-                fileDetail.filesize = Util.size2String(returnCursor.getLong(sizeIndex));
-                returnCursor.close();
-            }
-        }
-
-        return fileDetail;
-    }
 
     public void showProgressDialog(String title ) {
         if (progressDialog==null) {
@@ -546,13 +484,11 @@ public class ChatFragment extends Fragment {
             if (myUid.equals(message.getUid()) ) {
                 switch(message.getMsgtype()){
                     case "1": return R.layout.item_chatimage_right;
-                    case "2": return R.layout.item_chatfile_right;
                     default:  return R.layout.item_chatmsg_right;
                 }
             } else {
                 switch(message.getMsgtype()){
                     case "1": return R.layout.item_chatimage_left;
-                    case "2": return R.layout.item_chatfile_left;
                     default:  return R.layout.item_chatmsg_left;
                 }
             }
@@ -574,17 +510,6 @@ public class ChatFragment extends Fragment {
 
             if ("0".equals(message.getMsgtype())) {                                      // text message
                 messageViewHolder.msg_item.setText(message.getMsg());
-            } else
-            if ("2".equals(message.getMsgtype())) {                                      // file transfer
-                messageViewHolder.msg_item.setText(message.getFilename() + "\n" + message.getFilesize());
-                messageViewHolder.filename = message.getFilename();
-                messageViewHolder.realname = message.getMsg();
-                File file = new File(rootPath + message.getFilename());
-                if(file.exists()) {
-                    messageViewHolder.button_item.setText("Open File");
-                } else {
-                    messageViewHolder.button_item.setText("Download");
-                }
             } else {                                                                // image transfer
                 messageViewHolder.realname = message.getMsg();
                 Glide.with(getContext())
@@ -648,7 +573,6 @@ public class ChatFragment extends Fragment {
             return messageList.size();
         }
 
-
     }
 
     private class MessageViewHolder extends RecyclerView.ViewHolder {
@@ -687,30 +611,7 @@ public class ChatFragment extends Fragment {
         // file download and open
         Button.OnClickListener downloadClickListener = new View.OnClickListener() {
             public void onClick(View view) {
-                if ("Download".equals(button_item.getText())) {
-                    download();
-                } else {
                     openWith();
-                }
-            }
-            public void download() {
-                showProgressDialog("Downloading File.");
-
-                final File localFile = new File(rootPath, filename);
-
-                storageReference.child("files/"+realname).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-                        button_item.setText("Open File");
-                        hideProgressDialog();
-                        Log.e("DMC ","local file created " +localFile.toString());
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Log.e("DMC ","local file not created  " +exception.toString());
-                    }
-                });
             }
 
             public void openWith() {

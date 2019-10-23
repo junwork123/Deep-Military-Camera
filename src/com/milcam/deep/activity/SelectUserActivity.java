@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -29,8 +30,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.milcam.deep.R;
-import com.milcam.deep.common.FirestoreAdapter;
-import com.milcam.deep.common.Util;
+import com.milcam.deep.env.FirestoreAdapter;
 import com.milcam.deep.model.UserModel;
 
 import java.util.HashMap;
@@ -78,7 +78,7 @@ public class SelectUserActivity extends AppCompatActivity {
     Button.OnClickListener makeRoomClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <2) {
-                Util.showMessage(getApplicationContext(), "Please select 2 or more user");
+                Toast.makeText(getApplicationContext(), "Please select 2 or more user", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -92,7 +92,7 @@ public class SelectUserActivity extends AppCompatActivity {
     Button.OnClickListener addRoomUserClickListener = new View.OnClickListener() {
         public void onClick(View view) {
             if (selectedUsers.size() <1) {
-                Util.showMessage(getApplicationContext(), "Please select 1 or more user");
+                Toast.makeText(getApplicationContext(), "Please select 1 or more user", Toast.LENGTH_SHORT).show();
                 return;
             }
             CreateChattingRoom(FirebaseFirestore.getInstance().collection("rooms").document(roomID) );

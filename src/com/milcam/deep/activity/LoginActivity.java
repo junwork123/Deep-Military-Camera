@@ -22,7 +22,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.milcam.deep.R;
-import com.milcam.deep.common.Util;
 import com.milcam.deep.model.UserModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -81,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
-                        Util.showMessage(getApplicationContext(), task.getException().getMessage());
+                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -119,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                        Util.showMessage(getApplicationContext(), task.getException().getMessage());
+                        Toast.makeText(getApplicationContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });

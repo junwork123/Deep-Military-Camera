@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package com.milcam.deep.photoview;
+package com.milcam.deep.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -22,30 +22,23 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.Button;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.milcam.deep.R;
-import com.milcam.deep.common.Util;
 import com.milcam.deep.model.Message;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class ViewPagerActivity extends AppCompatActivity {
@@ -54,7 +47,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 	private static String realname;
 	private static ViewPager viewPager;
 	private static ArrayList<Message> imgList = new ArrayList<>();
-    private String rootPath = Util.getRootPath()+"/DMC/";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -68,9 +60,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 
 		viewPager = findViewById(R.id.view_pager);
 		viewPager.setAdapter(new SamplePagerAdapter());
-
-        findViewById(R.id.downloadBtn).setOnClickListener(downloadBtnClickListener);
-		//findViewById(R.id.rotateBtn).setOnClickListener(rotateBtnClickListener);
 
         ActionBar actionBar = getSupportActionBar();
         //actionBar.setIcon(R.drawable.back);
@@ -91,37 +80,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
-	Button.OnClickListener downloadBtnClickListener = new View.OnClickListener() {
-		public void onClick(final View view) {
-			Message message = imgList.get(viewPager.getCurrentItem());
-            /// showProgressDialog("Downloading File.");
-
-			final File localFile = new File(rootPath, message.getFilename());
-
-			// realname == message.msg
-			FirebaseStorage.getInstance().getReference().child("files/"+message.getMsg()).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
-				@Override
-				public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
-					// hideProgressDialog();
-					Util.showMessage(view.getContext(), "Downloaded file");
-					Log.e("DMC ","local file created " +localFile.toString());
-				}
-			}).addOnFailureListener(new OnFailureListener() {
-				@Override
-				public void onFailure(@NonNull Exception exception) {
-					Log.e("DMC ","local file not created  " +exception.toString());
-				}
-			});
-		}
-	};
-
-    Button.OnClickListener rotateBtnClickListener = new View.OnClickListener() {
-        public void onClick(View view) {
-            View child = viewPager.getChildAt(viewPager.getCurrentItem());
-            PhotoView photoView = child.findViewById(R.id.photoView);
-            photoView.setRotation(photoView.getRotation()+90);
-        }
-    };
 
 	static class SamplePagerAdapter extends PagerAdapter {
 		private StorageReference storageReference;

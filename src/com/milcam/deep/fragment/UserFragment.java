@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -28,7 +29,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.milcam.deep.R;
 import com.milcam.deep.activity.UserPWActivity;
-import com.milcam.deep.common.Util;
 import com.milcam.deep.model.UserModel;
 
 import java.io.ByteArrayOutputStream;
@@ -119,7 +119,7 @@ public class UserFragment extends Fragment {
                         @Override
                         public void onSuccess(Void aVoid) {
                             if (userPhotoUri==null) {
-                                Util.showMessage(getActivity(), "Success to Save.");
+                                Toast.makeText(getActivity(), "Success to Save.", Toast.LENGTH_SHORT).show();
                             } else {
                                 // small image
                                 Glide.with(getContext())
@@ -133,7 +133,7 @@ public class UserFragment extends Fragment {
                                                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                                                 byte[] data = baos.toByteArray();
                                                 FirebaseStorage.getInstance().getReference().child("userPhoto/" + uid).putBytes(data);
-                                                Util.showMessage(getActivity(), "Success to Save.");
+                                                Toast.makeText(getActivity(), "Success to Save.", Toast.LENGTH_SHORT).show();
                                             }
                                         });
                             }
@@ -166,7 +166,6 @@ public class UserFragment extends Fragment {
         } else {
             user_msg.setError(null);
         }
-        Util.hideKeyboard(getActivity());
 
         return valid;
     }
