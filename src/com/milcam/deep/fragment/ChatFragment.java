@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +40,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.eventbus.Subscribe;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
@@ -59,20 +59,17 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.milcam.deep.R;
-import com.milcam.deep.activity.CameraActivity;
 import com.milcam.deep.activity.DetectorActivity;
 import com.milcam.deep.common.Util;
 import com.milcam.deep.model.ChatModel;
+import com.milcam.deep.model.Events;
 import com.milcam.deep.model.Message;
-import com.milcam.deep.model.NotificationModel;
 import com.milcam.deep.model.UserModel;
 import com.milcam.deep.photoview.ViewPagerActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,17 +77,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-
 import static android.app.Activity.RESULT_OK;
 
-public class ChatFragment extends Fragment{
+public class ChatFragment extends Fragment {
 
     private static final int PICK_FROM_ALBUM = 1;
     private static final int PICK_FROM_FILE = 2;
@@ -116,8 +105,6 @@ public class ChatFragment extends Fragment{
     private ProgressDialog progressDialog = null;
     private Integer userCount = 0;
 
-    private FrameLayout camView;
-
     public ChatFragment() {
     }
 
@@ -138,7 +125,6 @@ public class ChatFragment extends Fragment{
         recyclerView = view.findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
-
 
         msg_input = view.findViewById(R.id.msg_input);
         sendBtn = view.findViewById(R.id.sendBtn);
@@ -320,6 +306,12 @@ public class ChatFragment extends Fragment{
         }
     };
 
+    @Subscribe
+    public void connectEvent(Events.EventAlert event) {
+        Log.i("DMC", event.getMessage());
+        sendMessage(event.getMessage(), "0", null);
+    }
+
     private void sendMessage(final String msg, String msgtype, final ChatModel.FileInfo fileinfo) {
         sendBtn.setEnabled(false);
 
@@ -377,35 +369,6 @@ public class ChatFragment extends Fragment{
 
         });
     };
-
-    void sendGCM(){
-        Gson gson = new Gson();
-        NotificationModel notificationModel = new NotificationModel();
-        notificationModel.notification.title = userList.get(myUid).getUsernm();
-        notificationModel.notification.body = msg_input.getText().toString();
-        notificationModel.data.title = userList.get(myUid).getUsernm();
-        notificationModel.data.body = msg_input.getText().toString();
-
-        for ( Map.Entry<String, UserModel> elem : userList.entrySet() ){
-            if (myUid.equals(elem.getValue().getUid())) continue;
-            notificationModel.to = elem.getValue().getToken();
-            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
-            Request request = new Request.Builder()
-                    .header("Content-Type", "application/json")
-                    .addHeader("Authorization", "key=")
-                    .url("https://fcm.googleapis.com/fcm/send")
-                    .post(requestBody)
-                    .build();
-
-            OkHttpClient okHttpClient = new OkHttpClient();
-            okHttpClient.newCall(request).enqueue(new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {                }
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {                }
-            });
-        }
-    }
 
     // choose image
     Button.OnClickListener imageBtnClickListener = new View.OnClickListener() {
@@ -505,6 +468,7 @@ public class ChatFragment extends Fragment{
     public void hideProgressDialog() {
         progressDialog.dismiss();
     }
+
     // =======================================================================================
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -667,26 +631,6 @@ public class ChatFragment extends Fragment{
                     messageViewHolder.divider.getLayoutParams().height = 60;
                 }
             }
-            /*messageViewHolder.timestamp.setText("");
-            if (message.getTimestamp()==null) {return;}
-
-            String day = dateFormatDay.format( message.getTimestamp());
-            String timestamp = dateFormatHour.format( message.getTimestamp());
-
-            messageViewHolder.timestamp.setText(timestamp);
-
-            if (position==0) {
-                messageViewHolder.divider_date.setText(day);
-                messageViewHolder.divider.setVisibility(View.VISIBLE);
-                messageViewHolder.divider.getLayoutParams().height = 60;
-            };
-            if (!day.equals(beforeDay) && beforeDay!=null) {
-                beforeViewHolder.divider_date.setText(beforeDay);
-                beforeViewHolder.divider.setVisibility(View.VISIBLE);
-                beforeViewHolder.divider.getLayoutParams().height = 60;
-            }
-            beforeViewHolder = messageViewHolder;
-            beforeDay = day;*/
         }
 
         void setReadCounter (Message message, final TextView textView) {

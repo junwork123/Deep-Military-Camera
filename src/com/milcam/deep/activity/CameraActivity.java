@@ -16,12 +16,10 @@
 
 package com.milcam.deep.activity;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
@@ -43,7 +41,6 @@ import android.media.Image;
 import android.media.Image.Plane;
 import android.media.ImageReader;
 import android.media.ImageReader.OnImageAvailableListener;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -55,10 +52,7 @@ import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.Surface;
 import android.view.TextureView;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.milcam.deep.AutoFitTextureView;
@@ -84,11 +78,6 @@ import java.util.concurrent.TimeUnit;
 public abstract class CameraActivity extends Activity
         implements OnImageAvailableListener, Camera.PreviewCallback {
   private static final Logger LOGGER = new Logger();
-
-  private static final int PERMISSIONS_REQUEST = 1;
-
-  private static final String PERMISSION_CAMERA = Manifest.permission.CAMERA;
-  private static final String PERMISSION_STORAGE = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
   private boolean debug = false;
 
@@ -704,14 +693,14 @@ public abstract class CameraActivity extends Activity
     /**
      * Initiate a still image capture.
      */
-    private void takePicture() {
+    public void takePicture() {
       lockFocus();
     }
 
     /**
      * Lock the focus as the first step for a still image capture.
      */
-    private void lockFocus() {
+    public void lockFocus() {
       try {
         // This is how to tell the camera to lock focus.
         mPreviewRequestBuilder.set(CaptureRequest.CONTROL_AF_TRIGGER,
@@ -720,6 +709,8 @@ public abstract class CameraActivity extends Activity
         mState = STATE_WAITING_LOCK;
         mCaptureSession.capture(mPreviewRequestBuilder.build(), mCaptureCallback,
                 mBackgroundHandler);
+
+
       } catch (CameraAccessException e) {
         e.printStackTrace();
       }
@@ -747,7 +738,7 @@ public abstract class CameraActivity extends Activity
      * Capture a still picture. This method should be called when we get a response in
      * {@link #mCaptureCallback} from both {@link #lockFocus()}.
      */
-    private void captureStillPicture() {
+    protected void captureStillPicture() {
       try {
         if (null == this || null == mCameraDevice) {
           return;
@@ -895,7 +886,6 @@ public abstract class CameraActivity extends Activity
     getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     setContentView(R.layout.activity_camera);
     setFragment();
-
   }
 
   private byte[] lastPreviewFrame;
@@ -1229,6 +1219,8 @@ public abstract class CameraActivity extends Activity
   }
 
   protected abstract void processImage();
+
+  public abstract void onCreate();
 
   protected abstract void onPreviewSizeChosen(final Size size, final int rotation);
   protected abstract int getLayoutId();

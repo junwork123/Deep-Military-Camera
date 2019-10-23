@@ -1,5 +1,6 @@
 package com.milcam.deep.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -12,16 +13,28 @@ import android.view.View;
 import com.milcam.deep.R;
 import com.milcam.deep.fragment.ChatFragment;
 import com.milcam.deep.fragment.UserListInRoomFragment;
+import com.milcam.deep.model.GlobalBus;
 
 public class ChatActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ChatFragment chatFragment;
     private UserListInRoomFragment userListInRoomFragment = null;
+    public GlobalBus gBus;
+    public static Context mContext;
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        gBus.unregister(this);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        gBus = new GlobalBus();
+        gBus.register(this);
+        mContext = this;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
