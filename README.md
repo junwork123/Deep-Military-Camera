@@ -1,6 +1,9 @@
 # TF-Detector
 
-## 1. 기사 모음
+## 1. 개요
+* 머신러닝 프레임워크인 Tensorflow와 안드로이드 FCM을 이용하여 거동수상자를 감지하고 부대원들에게 빠르게 전파할 수 있는 무인 감시체계.
+
+## 2. 기사 모음 
 
 * [싼 게 비지떡, IP 카메라](https://www.pentasecurity.co.kr/column/%EC%8B%BC-%EA%B2%8C-%EB%B9%84%EC%A7%80%EB%96%A1-ip-%EC%B9%B4%EB%A9%94%EB%9D%BC/)
 
@@ -12,7 +15,7 @@
 * [[단독] 스마트폰으로 작전지시하는 軍…10년 헛수고 무전기사업 재시동 - 매일경제](https://www.mk.co.kr/news/politics/view/2019/07/520019/)
 
 
-## 2. 참고자료
+## 3. 참고자료
 
 * [Detect Facial Features in Photos](https://developers.google.com/vision/android/detect-faces-tutorial)
 
