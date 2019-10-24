@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -158,13 +157,13 @@ public class ChatFragment extends Fragment {
         } else
         if (!"".equals(roomID) && roomID!=null) { // existing room (multi user)
             setChatRoom(roomID);
-        };
+        }
 
         if (roomID==null) {                                                     // new room for two user
             getUserInfoFromServer(myUid);
             getUserInfoFromServer(toUid);
             userCount = 2;
-        };
+        }
 
         recyclerView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
@@ -304,16 +303,17 @@ public class ChatFragment extends Fragment {
         final String msg = _msg;
         final int delay = 40;
         Log.d("DMC", msg);
-        if( msgCount == 0 || msgCount == delay/2) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    sendMessage(msg, "0", null);
-                }
-            }, 1000); // 지연시간
-
-        }
-        msgCount = (msgCount % delay) +1;
+        sendMessage(msg, "0", null);
+//        if( msgCount == 0 || msgCount == delay/2) {
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    sendMessage(msg, "0", null);
+//                }
+//            }, 1000); // 지연시간
+//
+//        }
+//        msgCount = (msgCount % delay) +1;
     }
 
     private void sendMessage(final String msg, String msgtype, final ChatModel.FileInfo fileinfo) {
@@ -371,7 +371,7 @@ public class ChatFragment extends Fragment {
             }
 
         });
-    };
+    }
 
     // choose image
     Button.OnClickListener imageBtnClickListener = new View.OnClickListener() {

@@ -26,15 +26,17 @@ import android.graphics.Paint.Style;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.media.ImageReader.OnImageAvailableListener;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Size;
 import android.util.TypedValue;
+import android.view.View;
 import android.widget.Toast;
 
-import com.milcam.deep.view.OverlayView;
 import com.milcam.deep.R;
+import com.milcam.deep.detector.MultiBoxTracker;
 import com.milcam.deep.detector.TensorFlowMultiBoxDetector;
 import com.milcam.deep.detector.TensorFlowObjectDetectionAPIModel;
 import com.milcam.deep.detector.TensorFlowYoloDetector;
@@ -42,11 +44,12 @@ import com.milcam.deep.env.BorderedText;
 import com.milcam.deep.env.ImageUtils;
 import com.milcam.deep.env.Logger;
 import com.milcam.deep.model.Classifier;
-import com.milcam.deep.detector.MultiBoxTracker;
+import com.milcam.deep.view.OverlayView;
 
-import org.tensorflow.Session;
-
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
@@ -85,12 +88,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   private static final String YOLO_OUTPUT_NAMES = "output";
   private static final int YOLO_BLOCK_SIZE = 32;
 
-  // Which detection model to use: by default uses Tensorflow Object Detection API frozen
-  // checkpoints.  Optionally use legacy Multibox (trained using an older version of the API)
-  // or YOLO.
-  private enum DetectorMode {
-    TF_OD_API, MULTIBOX, YOLO;
-  }
+  final int delay = 40;
   private static final DetectorMode MODE = DetectorMode.TF_OD_API;
 
   // Minimum detection confidence to track a detection.
@@ -126,11 +124,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
   private byte[] luminanceCopy;
 
   private BorderedText borderedText;
-
-  @Override
-  public void onCreate(){
-    super.onCreate(null);
-  }
+  private int msgCount = 0;
 
   @Override
   public void onPreviewSizeChosen(final Size size, final int rotation) {
@@ -199,7 +193,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     cropToFrameTransform = new Matrix();
     frameToCropTransform.invert(cropToFrameTransform);
 
-    trackingOverlay = (OverlayView) findViewById(R.id.tracking_overlay);
+    trackingOverlay = findViewById(R.id.tracking_overlay);
     trackingOverlay.addCallback(
         new OverlayView.DrawCallback() {
           @Override
@@ -255,7 +249,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         });
   }
 
-  OverlayView trackingOverlay;
+  @Override
+  public void onCreate() {
+    super.onCreate(null);
+  }
 
   @Override
   protected void processImage() {
@@ -338,12 +335,24 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                   final String msg = "거동수상자 발생";
                   Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
                   Log.d("DMC", "Detector : " + result);
-                  runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                      ((ChatActivity)ChatActivity.mContext).gBus.post(msg);
-                    }
-                  });
+
+                  if (msgCount == 0 || msgCount == delay / 2) {
+                    new Handler().postDelayed(new Runnable() {
+                      @Override
+                      public void run() {
+                        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                            ((ChatActivity) ChatActivity.mContext).gBus.post(msg);
+                            capture();
+                          }
+                        });
+                      }
+                    }, 1000); // 지연시간
+
+                  }
+                  msgCount = (msgCount % delay) + 1;
+
 
                 }
                 mappedRecognitions.add(result);
@@ -360,6 +369,47 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         });
   }
 
+  OverlayView trackingOverlay;
+
+  public void capture() {
+    Date now = new Date();
+    android.text.format.DateFormat.format("yyyy-MM-dd_hh:mm:ss", now);
+    String mPath = Environment.getExternalStorageDirectory().toString() + "/DMC/" + now + ".jpg";
+
+    View root = this.getWindow().getDecorView().getRootView();
+    root.setDrawingCacheEnabled(true);
+    root.buildDrawingCache(true);
+
+    Bitmap screenshot = Bitmap.createBitmap(root.getMeasuredWidth(),
+            root.getMeasuredHeight(), Bitmap.Config.ARGB_8888);
+
+    Canvas screenShotCanvas = new Canvas(screenshot);
+    root.draw(screenShotCanvas);
+
+    // get view coordinates
+    int[] location = new int[2];
+    root.getLocationInWindow(location);
+
+    try {
+      File imageFile = new File(mPath);
+      FileOutputStream outputStream = new FileOutputStream(imageFile);
+      int quality = 100;
+      screenshot.compress(Bitmap.CompressFormat.JPEG, quality, outputStream);
+      root.setDrawingCacheEnabled(false);
+      outputStream.flush();
+      outputStream.close();
+      Log.d("DMC", "Screenshot : " + mPath);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  // Which detection model to use: by default uses Tensorflow Object Detection API frozen
+  // checkpoints.  Optionally use legacy Multibox (trained using an older version of the API)
+  // or YOLO.
+  private enum DetectorMode {
+    TF_OD_API, MULTIBOX, YOLO
+  }
   @Override
   protected int getLayoutId() {
     return R.layout.camera_connection_fragment_tracking;

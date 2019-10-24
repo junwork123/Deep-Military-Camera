@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
                         UserModel userModel = new UserModel();
                         userModel.setUid(uid);
                         userModel.setUserid(id);
-                        userModel.setUsernm(extractIDFromEmail(id));
+                        userModel.setUsernm(id);
                         userModel.setUsermsg("...");
 
                         FirebaseFirestore db = FirebaseFirestore.getInstance();

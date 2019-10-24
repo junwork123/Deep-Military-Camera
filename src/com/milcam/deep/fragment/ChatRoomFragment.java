@@ -149,8 +149,13 @@ public class ChatRoomFragment extends Fragment{
                                     for( String key : users.keySet() ){
                                         if (myUid.equals(key)) continue;
                                         UserModel userModel = userList.get(key);
-                                        chatRoomModel.setTitle(userModel.getUsernm());
-                                        chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        try {
+                                            chatRoomModel.setTitle(userModel.getUsernm());
+                                            chatRoomModel.setPhoto(userModel.getUserphoto());
+                                        } catch (Exception error) {
+                                            //chatRoomModel.setTitle(document.getString("title"));
+                                            error.getStackTrace();
+                                        }
                                     }
                                 } else {                // group chat room
                                     chatRoomModel.setTitle(document.getString("title"));
