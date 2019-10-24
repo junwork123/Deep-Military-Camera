@@ -1,7 +1,7 @@
 # TF-Detector
 
 ## 1. 개요
-* 머신러닝 프레임워크인 Tensorflow와 안드로이드 FCM을 이용하여 거동수상자를 감지하고 부대원들에게 빠르게 전파할 수 있는 무인 감시체계.
+* 머신러닝 프레임워크인 Tensorflow와 Firebase를 이용하여 거동수상자를 감지하고 부대원들에게 빠르게 전파할 수 있는 무인 감시체계.
    ### 가. 컴퓨터 구성 / 필수조건 안내
       - 안드로이드 API 레벨 28 이상
    ### 나. 설치 안내
@@ -50,7 +50,8 @@
         (참고 : https://m.blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221406814289&proxyReferer=https%3A%2F%2Fwww.google.com%2F)
      
    ### 자. 크레딧
-      -      
+      - R.O.K Navy Office of Public Affairs, Troop Information & Education
+      - R.O.K Navy Information Systems Management Group
    ### 차. 업데이트 정보
       -
       
