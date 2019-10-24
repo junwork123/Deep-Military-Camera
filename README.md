@@ -1,4 +1,4 @@
-# TF-Detector
+# Deep-Military-Camera
 
 ## 1. 개요
 * 머신러닝 프레임워크인 Tensorflow와 Firebase를 이용하여 거동수상자를 감지하고 부대원들에게 빠르게 전파할 수 있는 무인 감시체계.
