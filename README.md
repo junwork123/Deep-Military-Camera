@@ -6,9 +6,13 @@
       - 권장 : 안드로이드 API 레벨 28 (Android 9.0, Pie)
       - 최소 : 안드로이드 API 레벨 21 이상(Android 5.0, Lollipop)
    ### 나. 설치 안내
-      - 
-   ### 다. 사용법
       -
+   ### 다. 사용법
+    |![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%B2%AB%EC%8B%A4%ED%96%89.png)|      ![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%9C%A0%EC%A0%80%EB%AA%A9%EB%A1%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%B1%84%ED%8C%85%EB%AA%A9%EB%A1%9D.png)|
+    |:----------:|:-------------:|:------:|
+    |1. 첫 실행/권한 요청|2. 유저 목록|3. 채팅방 목록|
+    |![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EB%B3%B5%EC%88%98%EC%9D%B8%EC%8B%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EA%B1%B0%EB%8F%99%EC%88%98%EC%82%AC%EC%9E%90%EC%9D%B8%EC%8B%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%84%B8%EB%B6%80%EC%B1%84%ED%8C%85.png)|
+    |4. 거수자 인식화면|5. 거수자 보고 및 확인|6: 채팅방| 
    ### 라. 파일 정보 및 목록
       -  ├─activity
          │      CameraActivity.java
