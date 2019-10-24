@@ -49,22 +49,33 @@ import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.milcam.deep.R;
 import com.milcam.deep.activity.ChatActivity;
 import com.milcam.deep.activity.DetectorActivity;
 import com.milcam.deep.model.ChatModel;
 import com.milcam.deep.model.Message;
+import com.milcam.deep.model.NotificationModel;
 import com.milcam.deep.model.UserModel;
 import com.milcam.deep.view.ViewPagerActivity;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class ChatFragment extends Fragment {
 
@@ -364,6 +375,7 @@ public class ChatFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            sendGCM();
                             sendBtn.setEnabled(true);
                         }
                     }
@@ -647,6 +659,38 @@ public class ChatFragment extends Fragment {
                 startActivity(intent);
             }
         };
+    }
+
+    void sendGCM() {
+        Gson gson = new Gson();
+        NotificationModel notificationModel = new NotificationModel();
+        notificationModel.notification.title = userList.get(myUid).getUsernm();
+        notificationModel.notification.body = msg_input.getText().toString();
+        notificationModel.data.title = userList.get(myUid).getUsernm();
+        notificationModel.data.body = msg_input.getText().toString();
+
+        for (Map.Entry<String, UserModel> elem : userList.entrySet()) {
+            if (myUid.equals(elem.getValue().getUid())) continue;
+            notificationModel.to = elem.getValue().getToken();
+            RequestBody requestBody = RequestBody.create(MediaType.parse("application/json; charset=utf8"), gson.toJson(notificationModel));
+            Request request = new Request.Builder()
+                    .header("Content-Type", "application/json")
+                    .addHeader("Authorization", "key=AIzaSyCPoUTL4sh3KEI1Xg5RLUi65S7b8Pop1N8")
+                    .url("https://fcm.googleapis.com/fcm/send")
+                    .post(requestBody)
+                    .build();
+
+            OkHttpClient okHttpClient = new OkHttpClient();
+            okHttpClient.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                }
+            });
+        }
     }
 
     public void backPressed() {
