@@ -2,9 +2,58 @@
 
 ## 1. 개요
 * 머신러닝 프레임워크인 Tensorflow와 안드로이드 FCM을 이용하여 거동수상자를 감지하고 부대원들에게 빠르게 전파할 수 있는 무인 감시체계.
-### 가. 컴퓨터 구성 / 필수조건 안내
-* 안드로이드 API 레벨 28 이상
+   ### 가. 컴퓨터 구성 / 필수조건 안내
+      - 안드로이드 API 레벨 28 이상
+   ### 나. 설치 안내
+      -
+   ### 다. 사용법
+      -
+   ### 라. 파일 정보 및 목록
+      -      
+   ### 마. 저작권 및 사용권 정보
+      - Tensorflow  
+                          Apache 2.0 Open Source Library
 
+             Copyright 2019 The TensorFlow Authors.  All rights reserved.
+
+                                 Apache License
+                           Version 2.0, January 2004
+                        http://www.apache.org/licenses/
+                        
+                        
+      - Otto
+
+        Copyright 2013 Square, Inc.
+
+        Licensed under the Apache License, Version 2.0 (the "License");
+        you may not use this file except in compliance with the License.
+        You may obtain a copy of the License at
+
+           http://www.apache.org/licenses/LICENSE-2.0
+
+        Unless required by applicable law or agreed to in writing, software
+        distributed under the License is distributed on an "AS IS" BASIS,
+        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+        See the License for the specific language governing permissions and
+        limitations under the License.
+
+   ### 바. 배포자 및 개발자의 연락처 정보
+      - 해)중위 최준혁 : 군)910-6625, 일) 010-2471-7714
+      - 해)중위 김형민 : 군)910-5752, 일) 010-3251-7028     
+   ### 사. 알려진 버그
+      - Android Studio에서 프로젝트 빌드시 'File google-services.json is missing.
+        The Google Services Plugin cannot function without it.' 메세지와 함께 실패.    
+   ### 아. 문제 발생에 대한 해결책
+      - 파이어베이스 이용을 위한 환경설정 파일인 'google-services.json' 파일이 민감정보를
+        포함하고 있기때문에 GitHub 업로드시 누락되어 일어나는 현상으로 [파이어베이스 콘솔] -
+        [프로젝트 설정] - [내 앱] 탭의 최신 구성 파일 다운로드를 통하여 프로젝트 최상위에 추가시켜준다.
+        (참고 : https://m.blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221406814289&proxyReferer=https%3A%2F%2Fwww.google.com%2F)
+     
+   ### 자. 크레딧
+      -      
+   ### 차. 업데이트 정보
+      -
+      
 ## 2. 기사 모음
 
 * [싼 게 비지떡, IP 카메라](https://www.pentasecurity.co.kr/column/%EC%8B%BC-%EA%B2%8C-%EB%B9%84%EC%A7%80%EB%96%A1-ip-%EC%B9%B4%EB%A9%94%EB%9D%BC/)
