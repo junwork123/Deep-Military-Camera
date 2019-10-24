@@ -14,7 +14,7 @@
     |![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EB%B3%B5%EC%88%98%EC%9D%B8%EC%8B%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EA%B1%B0%EB%8F%99%EC%88%98%EC%82%AC%EC%9E%90%EC%9D%B8%EC%8B%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%84%B8%EB%B6%80%EC%B1%84%ED%8C%85.png)|
     |4. 거수자 인식화면|5. 거수자 보고 및 확인|6: 채팅방| 
    ### 라. 파일 정보 및 목록
-      -  ├─activity
+      -  ├─activity : DMC의 각종 화면을 나타내는 액티비티 디렉토리
          │      CameraActivity.java
          │      ChatActivity.java 
          │      DetectorActivity.java
@@ -23,14 +23,14 @@
          │      SelectUserActivity.java 
          │      SplashActivity.java
          │      UserPWActivity.java
-         ├─detector
+         ├─detector : Tensorflow의 학습모델 및 트래킹을 담당하는 디렉토리
          │      MultiBoxTracker.java
          │      ObjectTracker.java       
          │      TensorFlowImageClassifier.java        
          │      TensorFlowMultiBoxDetector.java        
          │      TensorFlowObjectDetectionAPIModel.java
          │      TensorFlowYoloDetector.java
-         ├─env        
+         ├─env : : Firebase 및 라이브러리가 들어있는 디렉토리
          │      BorderedText.java     
          │      FirestoreAdapter.java      
          │      ImageUtils.java      
@@ -39,7 +39,7 @@
          │      MyFirebaseMessagingService.java      
          │      Size.java
          │      SplitTimer.java
-         ├─fragment
+         ├─fragment : DMC의 액티비티에서 각종 정보를 표시해주는 프래그먼트 디렉토리
          │      CameraConnectionFragment.java         
          │      ChatFragment.java         
          │      ChatRoomFragment.java         
@@ -47,7 +47,7 @@
          │      UserFragment.java         
          │      UserListFragment.java         
          │      UserListInRoomFragment.java         
-         ├─model
+         ├─model : Firebase 및 사용자의 정보를 정의해주는 모델 디렉토리
          │      ChatModel.java      
          │      ChatRoomModel.java 
          │      Classifier.java  
@@ -56,7 +56,7 @@
          │      NotificationModel.java         
          │      ResultsView.java         
          │      UserModel.java         
-         └─view        
+         └─view : Tensorflow 및 DMC의 화면을 그려주는 뷰 디렉토리       
                 AutoFitTextureView.java     
                 HackyViewPager.java           
                 OverlayView.java           
