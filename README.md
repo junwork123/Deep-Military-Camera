@@ -9,7 +9,55 @@
    ### 다. 사용법
       -
    ### 라. 파일 정보 및 목록
-      -      
+      -  ├─activity
+         │      CameraActivity.java
+         │      ChatActivity.java 
+         │      DetectorActivity.java
+         │      LoginActivity.java          
+         │      MainActivity.java         
+         │      SelectUserActivity.java 
+         │      SplashActivity.java
+         │      UserPWActivity.java
+         ├─detector
+         │      MultiBoxTracker.java
+         │      ObjectTracker.java       
+         │      TensorFlowImageClassifier.java        
+         │      TensorFlowMultiBoxDetector.java        
+         │      TensorFlowObjectDetectionAPIModel.java
+         │      TensorFlowYoloDetector.java
+         ├─env        
+         │      BorderedText.java     
+         │      FirestoreAdapter.java      
+         │      ImageUtils.java      
+         │      Logger.java      
+         │      MyAppGlideModule.java      
+         │      MyFirebaseMessagingService.java      
+         │      Size.java
+         │      SplitTimer.java
+         ├─fragment
+         │      CameraConnectionFragment.java         
+         │      ChatFragment.java         
+         │      ChatRoomFragment.java         
+         │      LegacyCameraConnectionFragment.java         
+         │      UserFragment.java         
+         │      UserListFragment.java         
+         │      UserListInRoomFragment.java         
+         ├─model
+         │      ChatModel.java      
+         │      ChatRoomModel.java 
+         │      Classifier.java  
+         │      GlobalBus.java       
+         │      Message.java
+         │      NotificationModel.java         
+         │      ResultsView.java         
+         │      UserModel.java         
+         └─view        
+                AutoFitTextureView.java     
+                HackyViewPager.java           
+                OverlayView.java           
+                RecognitionScoreView.java  
+                ViewPagerActivity.java 
+    
    ### 마. 저작권 및 사용권 정보
       - Tensorflow  
                           Apache 2.0 Open Source Library
