@@ -7,6 +7,11 @@ public class UserModel {
     private String token;
     private String userphoto;
     private String usermsg;
+    private static String screte = "@mnd.secret";
+
+    public static String getScrete() {
+        return screte;
+    }
 
     public String getUserid() {
         return userid;

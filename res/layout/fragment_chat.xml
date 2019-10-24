@@ -27,7 +27,7 @@
             android:id="@+id/fileBtn"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
-            android:background="@android:drawable/ic_menu_save" />
+            android:background="@android:drawable/ic_menu_camera" />
 
         <EditText
             android:id="@+id/msg_input"

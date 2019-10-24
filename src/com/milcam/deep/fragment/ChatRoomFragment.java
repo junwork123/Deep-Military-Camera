@@ -163,7 +163,7 @@ public class ChatRoomFragment extends Fragment{
                                 roomList.add(entry.getValue());
                             }
                             notifyDataSetChanged();
-                            setBadge(getContext(), unreadTotal);
+                            //setBadge(getContext(), unreadTotal);
                         }
                     });
         }

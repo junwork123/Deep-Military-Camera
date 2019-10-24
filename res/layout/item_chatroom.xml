@@ -57,16 +57,17 @@
                     android:layout_alignParentRight="true"
                     android:text="last time"/>
 
-                <TextView
-                    android:id="@+id/unread_count"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentRight="true"
-                    android:textAlignment="center"
-                    android:background="@drawable/shape_round"
-                    android:text="0"/>
+            <TextView
+                android:id="@+id/unread_count"
+                android:layout_width="25dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="40dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/shape_rectangle_red"
+                android:text="0"
+                android:textSize="13dp"
+                android:textAlignment="center"/>
         </RelativeLayout>
 
 </LinearLayout>

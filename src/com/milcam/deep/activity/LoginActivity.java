@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
                     shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_NETWORK_STATE) ||
                     shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_WIFI_STATE)) {
                 Toast.makeText(LoginActivity.this,
-                        "Camera AND storage permission are required for this demo", Toast.LENGTH_LONG).show();
+                        "Camera AND storage permission are required", Toast.LENGTH_LONG).show();
             }
             requestPermissions(new String[] {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE,
                     Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE}, PERMISSIONS_REQUEST);
@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(loginClick);
         signupBtn.setOnClickListener(signupClick);
 
-        sharedPreferences = getSharedPreferences("gujc", Activity.MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("dmc", Activity.MODE_PRIVATE);
         String id = sharedPreferences.getString("user_id", "");
         if (!"".equals(id)) {
             user_id.setText(id);
@@ -91,7 +91,10 @@ public class LoginActivity extends AppCompatActivity {
         public void onClick(View view) {
             if (!validateForm()) return;
             final String id = user_id.getText().toString();
-
+            if(! id.contains(UserModel.getScrete())){
+                Toast.makeText(getApplicationContext(), "인가되지 않은 이메일입니다", Toast.LENGTH_SHORT).show();
+                return;
+            }
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(id, user_pw.getText().toString()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
