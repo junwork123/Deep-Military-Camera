@@ -6,7 +6,8 @@
       - 권장 : 안드로이드 API 레벨 28 (Android 9.0, Pie)
       - 최소 : 안드로이드 API 레벨 21 이상(Android 5.0, Lollipop)
    ### 나. 설치 안내
-      -
+      - git clone https://github.com/MaliciousJ/Deep-Military-Camera.git
+      - 바. 알려진 버그 항목 참조하여 안드로이드 스튜디오에서 빌드 후 실행
    ### 다. 사용법
     |![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%B2%AB%EC%8B%A4%ED%96%89.png)|      ![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%9C%A0%EC%A0%80%EB%AA%A9%EB%A1%9D.png)|![ex_screenshot](https://github.com/MaliciousJ/Deep-Military-Camera/blob/master/sample_images/%EC%B1%84%ED%8C%85%EB%AA%A9%EB%A1%9D.png)|
     |:----------:|:-------------:|:------:|
@@ -78,7 +79,18 @@
         (참고 : https://m.blog.naver.com/PostView.nhn?blogId=ndb796&logNo=221406814289&proxyReferer=https%3A%2F%2Fwww.google.com%2F)
      
    ### 자. 업데이트 정보
-      -
+      - Oct 23, 2019
+         - otto eventbus를 이용해 거동수상자 감지 시 이벤트 전달 기능 추가
+         - 레이아웃 및 코드 갈무리
+      - Oct 22, 2019
+         - GCM(Google Cloud Message) 메시지 Receiver 및 Broadcast 기능 구현
+         - 거동수상자 감지 기능 추가
+         - 프래그먼트 및 뷰 구성
+         
+      - Oct 21, 2019
+         - Tensorflow Framework를 이용한 객체 탐지 기능 구현
+         - Firebase 기반 메시지 송수신 기능 구현
+         - 기초 레이아웃 구성
       
    ### 아. 크레딧
       - Google Developers.
