@@ -27,7 +27,6 @@ import android.graphics.RectF;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.util.TypedValue;
-import android.widget.Toast;
 
 import com.milcam.deep.env.BorderedText;
 import com.milcam.deep.env.ImageUtils;
@@ -218,7 +217,7 @@ public class MultiBoxTracker {
         String message =
             "Object tracking support not found. "
                 + "See tensorflow/examples/android/README.md for details.";
-        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+          //Toast.makeText(context, message, Toast.LENGTH_LONG).show();
         logger.e(message);
       }
     }
