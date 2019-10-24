@@ -200,7 +200,12 @@ public class ChatRoomFragment extends Fragment{
 
             final ChatRoomModel chatRoomModel = roomList.get(position);
 
-            roomViewHolder.room_title.setText(chatRoomModel.getTitle());
+            if(chatRoomModel.getTitle().length() < 20)
+                roomViewHolder.room_title.setText(chatRoomModel.getTitle());
+            else {
+                String roomName = chatRoomModel.getTitle().substring(0,17) + "…";
+                roomViewHolder.room_title.setText(roomName);
+            }
             roomViewHolder.last_msg.setText(chatRoomModel.getLastMsg());
             roomViewHolder.last_time.setText(chatRoomModel.getLastDatetime());
 
